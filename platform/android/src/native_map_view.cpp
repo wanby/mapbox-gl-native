@@ -94,6 +94,10 @@ void NativeMapView::bind() {
 /**
  * From mbgl::Backend.
  */
+gl::ProcAddress NativeMapView::initializeExtension(const char* name) {
+    return eglGetProcAddress(name);
+}
+
 void NativeMapView::activate() {
     if (active++) {
         return;
@@ -1309,10 +1313,6 @@ void NativeMapView::_createSurface(ANativeWindow *window_) {
                              eglGetError());
             throw std::runtime_error("eglMakeCurrent() failed");
         }
-
-        mbgl::gl::InitializeExtensions([] (const char * name) {
-             return reinterpret_cast<mbgl::gl::glProc>(eglGetProcAddress(name));
-        });
     }
 }
 

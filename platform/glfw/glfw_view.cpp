@@ -85,8 +85,6 @@ GLFWView::GLFWView(bool fullscreen_, bool benchmark_)
     glfwSetScrollCallback(window, onScroll);
     glfwSetKeyCallback(window, onKey);
 
-    mbgl::gl::InitializeExtensions(glfwGetProcAddress);
-
     glfwGetWindowSize(window, &width, &height);
     glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
     pixelRatio = static_cast<float>(fbWidth) / width;
@@ -495,6 +493,10 @@ mbgl::Size GLFWView::getSize() const {
 
 mbgl::Size GLFWView::getFramebufferSize() const {
     return { static_cast<uint32_t>(fbWidth), static_cast<uint32_t>(fbHeight) };
+}
+
+mbgl::gl::ProcAddress GLFWView::initializeExtension(const char* name) {
+    return glfwGetProcAddress(name);
 }
 
 void GLFWView::activate() {

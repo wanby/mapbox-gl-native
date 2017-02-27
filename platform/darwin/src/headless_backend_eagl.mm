@@ -29,7 +29,7 @@ struct EAGLImpl : public HeadlessBackend::Impl {
     EAGLContext* glContext = nullptr;
 };
 
-gl::glProc HeadlessBackend::initializeExtension(const char* name) {
+gl::ProcAddress HeadlessBackend::initializeExtension(const char* name) {
     static CFBundleRef framework = CFBundleGetBundleWithIdentifier(CFSTR("com.apple.opengles"));
     if (!framework) {
         throw std::runtime_error("Failed to load OpenGL framework.");
@@ -39,7 +39,7 @@ gl::glProc HeadlessBackend::initializeExtension(const char* name) {
     void* symbol = CFBundleGetFunctionPointerForName(framework, str);
     CFRelease(str);
 
-    return reinterpret_cast<gl::glProc>(symbol);
+    return reinterpret_cast<gl::ProcAddress>(symbol);
 }
 
 bool HeadlessBackend::hasDisplay() {

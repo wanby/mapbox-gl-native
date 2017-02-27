@@ -11,8 +11,6 @@
 
 QQuickMapboxGLRenderer::QQuickMapboxGLRenderer()
 {
-    QMapbox::initializeGLExtensions();
-
     QMapboxGLSettings settings;
     settings.setAccessToken(qgetenv("MAPBOX_ACCESS_TOKEN"));
     settings.setCacheDatabasePath("/tmp/mbgl-cache.db");

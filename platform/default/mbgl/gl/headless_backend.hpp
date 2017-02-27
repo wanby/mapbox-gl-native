@@ -1,7 +1,5 @@
 #pragma once
 
-#include <mbgl/gl/extension.hpp>
-
 #include <mbgl/map/backend.hpp>
 
 #include <memory>
@@ -30,7 +28,7 @@ public:
 
 private:
     // Implementation specific functions
-    static gl::glProc initializeExtension(const char*);
+    gl::ProcAddress initializeExtension(const char*) override;
 
     void activate() override;
     void deactivate() override;
@@ -43,7 +41,6 @@ private:
     std::unique_ptr<Impl> impl;
     std::shared_ptr<HeadlessDisplay> display;
 
-    bool extensionsLoaded = false;
     bool active = false;
 
     std::function<void(MapChange)> mapChangeCallback;
