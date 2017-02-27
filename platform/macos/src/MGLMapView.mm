@@ -26,7 +26,6 @@
 #import <mbgl/map/camera.hpp>
 #import <mbgl/storage/reachability.h>
 #import <mbgl/util/default_thread_pool.hpp>
-#import <mbgl/gl/extension.hpp>
 #import <mbgl/gl/context.hpp>
 #import <mbgl/map/backend.hpp>
 #import <mbgl/sprite/sprite_image.hpp>
@@ -772,7 +771,7 @@ public:
 - (void)renderSync {
     if (!self.dormant) {
         // Enable vertex buffer objects.
-        mbgl::gl::InitializeExtensions([](const char *name) {
+        _mbglView->initializeExtensions([](const char *name) {
             static CFBundleRef framework = CFBundleGetBundleWithIdentifier(CFSTR("com.apple.opengl"));
             if (!framework) {
                 throw std::runtime_error("Failed to load OpenGL framework.");
@@ -782,7 +781,7 @@ public:
             void *symbol = CFBundleGetFunctionPointerForName(framework, str);
             CFRelease(str);
 
-            return reinterpret_cast<mbgl::gl::glProc>(symbol);
+            return reinterpret_cast<mbgl::Backend::glProc>(symbol);
         });
 
         _mbglView->updateViewBinding();

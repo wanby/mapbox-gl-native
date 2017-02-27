@@ -34,10 +34,7 @@ void HeadlessBackend::activate() {
     assert(hasContext());
     impl->activateContext();
 
-    if (!extensionsLoaded) {
-        gl::InitializeExtensions(initializeExtension);
-        extensionsLoaded = true;
-    }
+    initializeExtensions(initializeExtension);
 }
 
 void HeadlessBackend::deactivate() {

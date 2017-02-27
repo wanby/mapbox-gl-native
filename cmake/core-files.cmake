@@ -62,6 +62,8 @@ set(MBGL_CORE_FILES
     src/mbgl/gl/context.hpp
     src/mbgl/gl/debugging.cpp
     src/mbgl/gl/debugging.hpp
+    src/mbgl/gl/debugging_extension.cpp
+    src/mbgl/gl/debugging_extension.hpp
     src/mbgl/gl/depth_mode.cpp
     src/mbgl/gl/depth_mode.hpp
     src/mbgl/gl/draw_mode.hpp
@@ -87,8 +89,7 @@ set(MBGL_CORE_FILES
     src/mbgl/gl/uniform.hpp
     src/mbgl/gl/value.cpp
     src/mbgl/gl/value.hpp
-    src/mbgl/gl/vertex_array.cpp
-    src/mbgl/gl/vertex_array.hpp
+    src/mbgl/gl/vertex_array_extension.hpp
     src/mbgl/gl/vertex_buffer.hpp
 
     # layout

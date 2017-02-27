@@ -600,21 +600,6 @@ public:
     [_glView bindDrawable];
     [self insertSubview:_glView atIndex:0];
     _glView.contentMode = UIViewContentModeCenter;
-
-    // load extensions
-    //
-    mbgl::gl::InitializeExtensions([](const char * name) {
-        static CFBundleRef framework = CFBundleGetBundleWithIdentifier(CFSTR("com.apple.opengles"));
-        if (!framework) {
-            throw std::runtime_error("Failed to load OpenGL framework.");
-        }
-
-        CFStringRef str = CFStringCreateWithCString(kCFAllocatorDefault, name, kCFStringEncodingASCII);
-        void* symbol = CFBundleGetFunctionPointerForName(framework, str);
-        CFRelease(str);
-
-        return reinterpret_cast<mbgl::gl::glProc>(symbol);
-    });
 }
 
 - (UIImage *)compassImage
@@ -872,6 +857,19 @@ public:
 {
     if ( ! self.dormant)
     {
+        _mbglView->initializeExtensions([](const char * name) {
+            static CFBundleRef framework = CFBundleGetBundleWithIdentifier(CFSTR("com.apple.opengles"));
+            if (!framework) {
+                throw std::runtime_error("Failed to load OpenGL framework.");
+            }
+
+            CFStringRef str = CFStringCreateWithCString(kCFAllocatorDefault, name, kCFStringEncodingASCII);
+            void* symbol = CFBundleGetFunctionPointerForName(framework, str);
+            CFRelease(str);
+
+            return reinterpret_cast<mbgl::Backend::glProc>(symbol);
+        });
+
         _mbglView->updateViewBinding();
         _mbglMap->render(*_mbglView);
 

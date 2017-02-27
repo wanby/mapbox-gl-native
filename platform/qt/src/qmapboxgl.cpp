@@ -1570,6 +1570,16 @@ QMapboxGLPrivate::QMapboxGLPrivate(QMapboxGL *q, const QMapboxGLSettings &settin
 {
     qRegisterMetaType<QMapboxGL::MapChange>("QMapboxGL::MapChange");
 
+    initializeExtensions([](const char* name) {
+#if QT_VERSION >= 0x050000
+        QOpenGLContext* thisContext = QOpenGLContext::currentContext();
+        return thisContext->getProcAddress(name);
+#else
+        const QGLContext* thisContext = QGLContext::currentContext();
+        return reinterpret_cast<mbgl::Backend::glProc>(thisContext->getProcAddress(name));
+#endif
+    });
+
     fileSourceObj->setAccessToken(settings.accessToken().toStdString());
     fileSourceObj->setAPIBaseURL(settings.apiBaseUrl().toStdString());
 

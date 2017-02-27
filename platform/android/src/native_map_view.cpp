@@ -1185,8 +1185,8 @@ void NativeMapView::_createSurface(ANativeWindow *window_) {
             throw std::runtime_error("eglMakeCurrent() failed");
         }
 
-        mbgl::gl::InitializeExtensions([] (const char * name) {
-             return reinterpret_cast<mbgl::gl::glProc>(eglGetProcAddress(name));
+        initializeExtensions([] (const char * name) {
+             return reinterpret_cast<mbgl::Backend::glProc>(eglGetProcAddress(name));
         });
     }
 }

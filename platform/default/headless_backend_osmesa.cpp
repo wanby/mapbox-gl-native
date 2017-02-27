@@ -25,7 +25,7 @@ struct OSMesaImpl : public HeadlessBackend::Impl {
     GLubyte fakeBuffer = 0;
 };
 
-gl::glProc HeadlessBackend::initializeExtension(const char* name) {
+Backend::glProc HeadlessBackend::initializeExtension(const char* name) {
     return OSMesaGetProcAddress(name);
 }
 

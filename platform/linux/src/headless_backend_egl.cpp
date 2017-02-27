@@ -60,7 +60,7 @@ struct EGLImpl : public HeadlessBackend::Impl {
     EGLSurface glSurface = EGL_NO_SURFACE;
 };
 
-gl::glProc HeadlessBackend::initializeExtension(const char* name) {
+Backend::glProc HeadlessBackend::initializeExtension(const char* name) {
     return eglGetProcAddress(name);
 }
 

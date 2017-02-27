@@ -85,7 +85,7 @@ GLFWView::GLFWView(bool fullscreen_, bool benchmark_)
     glfwSetScrollCallback(window, onScroll);
     glfwSetKeyCallback(window, onKey);
 
-    mbgl::gl::InitializeExtensions(glfwGetProcAddress);
+    initializeExtensions(glfwGetProcAddress);
 
     glfwGetWindowSize(window, &width, &height);
     glfwGetFramebufferSize(window, &fbWidth, &fbHeight);

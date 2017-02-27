@@ -44,7 +44,7 @@ struct GLXImpl : public HeadlessBackend::Impl {
     GLXFBConfig* fbConfigs = nullptr;
 };
 
-gl::glProc HeadlessBackend::initializeExtension(const char* name) {
+Backend::glProc HeadlessBackend::initializeExtension(const char* name) {
     return glXGetProcAddress(reinterpret_cast<const GLubyte*>(name));
 }
 

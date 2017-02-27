@@ -20,6 +20,9 @@ public:
     // Returns the backend's context which manages OpenGL state.
     gl::Context& getContext();
 
+    using glProc = void (*)();
+    void initializeExtensions(glProc (*getProcAddress)(const char*));
+
     // Called when the map needs to be rendered; the backend should call Map::render() at some point
     // in the near future. (Not called for Map::renderStill() mode.)
     virtual void invalidate() = 0;
@@ -42,6 +45,7 @@ protected:
     virtual void deactivate() = 0;
 
     std::unique_ptr<gl::Context> context;
+    bool extensionsInitialized = false;
 
     friend class BackendScope;
 };

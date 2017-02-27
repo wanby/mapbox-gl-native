@@ -31,9 +31,20 @@ namespace gl {
 
 constexpr size_t TextureMax = 64;
 
+namespace extension {
+class VertexArray;
+class Debugging;
+} // namespace extension
+
 class Context : private util::noncopyable {
 public:
+    Context();
     ~Context();
+
+    using glProc = void (*)();
+    void initializeExtensions(glProc (*getProcAddress)(const char*));
+
+    void enableDebugging();
 
     UniqueShader createShader(ShaderType type, const std::string& source);
     UniqueProgram createProgram(ShaderID vertexShader, ShaderID fragmentShader);
@@ -155,11 +166,14 @@ public:
 
     void setDirtyState();
 
+    std::unique_ptr<extension::Debugging> debugging;
+    std::unique_ptr<extension::VertexArray> vertexArray;
+
     State<value::ActiveTexture> activeTexture;
     State<value::BindFramebuffer> bindFramebuffer;
     State<value::Viewport> viewport;
     std::array<State<value::BindTexture>, 2> texture;
-    State<value::BindVertexArray> vertexArrayObject;
+    State<value::BindVertexArray, const Context&> vertexArrayObject { *this };
     State<value::Program> program;
     State<value::BindVertexBuffer> vertexBuffer;
     State<value::BindElementBuffer> elementBuffer;
