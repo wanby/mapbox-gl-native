@@ -26,8 +26,8 @@
 #import <mbgl/map/camera.hpp>
 #import <mbgl/storage/reachability.h>
 #import <mbgl/util/default_thread_pool.hpp>
-#import <mbgl/gl/context.hpp>
 #import <mbgl/map/backend.hpp>
+#import <mbgl/gl/gl.hpp>
 #import <mbgl/sprite/sprite_image.hpp>
 #import <mbgl/storage/default_file_source.hpp>
 #import <mbgl/storage/network_status.hpp>
@@ -2759,24 +2759,19 @@ public:
         [NSOpenGLContext clearCurrentContext];
     }
 
-    mbgl::gl::value::Viewport::Type getViewport() const {
-        return { 0, 0, nativeView.framebufferSize };
-    }
-
     void updateViewBinding() {
-        fbo = mbgl::gl::value::BindFramebuffer::Get();
-        getContext().bindFramebuffer.setCurrentValue(fbo);
-        getContext().viewport.setCurrentValue(getViewport());
-        assert(mbgl::gl::value::Viewport::Get() == getContext().viewport.getCurrentValue());
+        MBGL_CHECK_ERROR(glGetIntegerv(GL_FRAMEBUFFER_BINDING, &fbo));
+        updateFramebufferBinding(fbo);
+        updateViewportSize(nativeView.framebufferSize);
     }
 
     void bind() override {
-        getContext().bindFramebuffer = fbo;
-        getContext().viewport = getViewport();
+        updateFramebufferBinding(fbo, UpdateType::Force);
+        updateViewportSize(nativeView.framebufferSize, UpdateType::Force);
     }
 
     mbgl::PremultipliedImage readStillImage() {
-        return getContext().readFramebuffer<mbgl::PremultipliedImage>(nativeView.framebufferSize);
+        return readFramebuffer(nativeView.framebufferSize);
     }
 
 private:

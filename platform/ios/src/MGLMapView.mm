@@ -1,8 +1,6 @@
 #import "MGLMapView_Private.h"
 
 #include <mbgl/util/logging.hpp>
-#include <mbgl/gl/extension.hpp>
-#include <mbgl/gl/context.hpp>
 
 #import <GLKit/GLKit.h>
 #import <OpenGLES/EAGL.h>
@@ -5298,22 +5296,17 @@ public:
     MBGLView(MGLMapView* nativeView_) : nativeView(nativeView_) {
     }
 
-    mbgl::gl::value::Viewport::Type getViewport() const {
-        return { 0, 0, nativeView.framebufferSize };
-    }
-
     /// This function is called before we start rendering, when iOS invokes our rendering method.
     /// iOS already sets the correct framebuffer and viewport for us, so we need to update the
     /// context state with the anticipated values.
     void updateViewBinding() {
         // We are using 0 as the placeholder value for the GLKView's framebuffer.
-        getContext().bindFramebuffer.setCurrentValue(0);
-        getContext().viewport.setCurrentValue(getViewport());
-        assert(mbgl::gl::value::Viewport::Get() == getContext().viewport.getCurrentValue());
+        updateFramebufferBinding(0);
+        updateViewportSize(nativeView.framebufferSize);
     }
 
     void bind() override {
-        if (getContext().bindFramebuffer != 0) {
+        if (getFramebufferBinding() != 0) {
             // Something modified our state, and we need to bind the original drawable again.
             // Doing this also sets the viewport to the full framebuffer.
             // Note that in reality, iOS does not use the Framebuffer 0 (it's typically 1), and we
@@ -5322,7 +5315,7 @@ public:
             updateViewBinding();
         } else {
             // Our framebuffer is still bound, but the viewport might have changed.
-            getContext().viewport = getViewport();
+            updateViewportSize(nativeView.framebufferSize, UpdateType::Force);
         }
     }
 

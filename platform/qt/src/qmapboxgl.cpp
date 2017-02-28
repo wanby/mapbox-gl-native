@@ -6,7 +6,6 @@
 
 #include <mbgl/annotation/annotation.hpp>
 #include <mbgl/gl/gl.hpp>
-#include <mbgl/gl/context.hpp>
 #include <mbgl/map/camera.hpp>
 #include <mbgl/map/map.hpp>
 #include <mbgl/style/conversion.hpp>
@@ -1596,10 +1595,8 @@ QMapboxGLPrivate::~QMapboxGLPrivate()
 void QMapboxGLPrivate::bind() {
     if (fbo) {
         fbo->bind();
-        getContext().bindFramebuffer.setDirty();
-        getContext().viewport = {
-            0, 0, { static_cast<uint32_t>(fbo->width()), static_cast<uint32_t>(fbo->height()) }
-        };
+        invalidateFramebufferBinding();
+        updateViewportSize({ static_cast<uint32_t>(fbo->width()), static_cast<uint32_t>(fbo->height()) });
     }
 }
 #else

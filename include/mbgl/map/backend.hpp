@@ -1,6 +1,8 @@
 #pragma once
 
 #include <mbgl/map/change.hpp>
+#include <mbgl/util/image.hpp>
+#include <mbgl/util/size.hpp>
 
 #include <memory>
 
@@ -29,6 +31,17 @@ public:
 
     // Notifies a watcher of map x/y/scale/rotation changes.
     virtual void notifyMapChange(MapChange change);
+
+    enum class UpdateType : bool {
+        Silent = false,
+        Force = true,
+    };
+
+    PremultipliedImage readFramebuffer(const Size&) const;
+    void invalidateFramebufferBinding();
+    void updateFramebufferBinding(uint32_t fbo, UpdateType = UpdateType::Silent);
+    uint32_t getFramebufferBinding();
+    void updateViewportSize(const Size&, UpdateType = UpdateType::Silent);
 
 protected:
     // Called when the backend's GL context needs to be made active or inactive. These are called,

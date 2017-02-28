@@ -14,8 +14,6 @@
 
 #include <jni/jni.hpp>
 
-#include <mbgl/gl/context.hpp>
-#include <mbgl/gl/extension.hpp>
 #include <mbgl/map/backend_scope.hpp>
 #include <mbgl/util/constants.hpp>
 #include <mbgl/util/event.hpp>
@@ -34,7 +32,6 @@
 #include "jni.hpp"
 #include "attach_env.hpp"
 #include "bitmap.hpp"
-#include "run_loop_impl.hpp"
 #include "java/util.hpp"
 
 namespace mbgl {
@@ -87,8 +84,8 @@ NativeMapView::~NativeMapView() {
  * From mbgl::View
  */
 void NativeMapView::bind() {
-    getContext().bindFramebuffer = 0;
-    getContext().viewport = { 0, 0, getFramebufferSize() };
+    updateFramebufferBinding(0, UpdateType::Force);
+    updateViewportSize(getFramebufferSize(), UpdateType::Force);
 }
 
 /**
@@ -203,7 +200,7 @@ void NativeMapView::render(jni::JNIEnv& env) {
     BackendScope guard(*this);
 
     if (framebufferSizeChanged) {
-        getContext().viewport = { 0, 0, getFramebufferSize() };
+        updateViewportSize(getFramebufferSize(), UpdateType::Force);
         framebufferSizeChanged = false;
     }
 
@@ -214,7 +211,7 @@ void NativeMapView::render(jni::JNIEnv& env) {
          snapshot = false;
 
          // take snapshot
-         auto image = getContext().readFramebuffer<mbgl::PremultipliedImage>(getFramebufferSize());
+         auto image = readFramebuffer(getFramebufferSize());
          auto bitmap = Bitmap::CreateBitmap(env, std::move(image));
 
          // invoke Mapview#OnSnapshotReady
@@ -1213,10 +1210,8 @@ mbgl::Size NativeMapView::getFramebufferSize() const {
 }
 
 void NativeMapView::updateViewBinding() {
-    getContext().bindFramebuffer.setCurrentValue(0);
-    assert(mbgl::gl::value::BindFramebuffer::Get() == getContext().bindFramebuffer.getCurrentValue());
-    getContext().viewport.setCurrentValue({ 0, 0, getFramebufferSize() });
-    assert(mbgl::gl::value::Viewport::Get() == getContext().viewport.getCurrentValue());
+    updateFramebufferBinding(0);
+    updateViewportSize(getFramebufferSize());
 }
 
 void NativeMapView::updateFps() {
