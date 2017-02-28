@@ -1,8 +1,6 @@
 package com.mapbox.mapboxsdk.constants;
 
 
-import com.mapbox.mapboxsdk.testapp.model.constants.AppConstant;
-
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
