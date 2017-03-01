@@ -923,11 +923,12 @@ NodeMap::NodeMap(v8::Local<v8::Object> options)
                      : 1.0;
       }()),
       backend(sharedDisplay()),
+      threadPool(mbgl::sharedThreadPool(8)),
       map(std::make_unique<mbgl::Map>(backend,
                                       mbgl::Size{ 256, 256 },
                                       pixelRatio,
                                       *this,
-                                      threadpool,
+                                      *threadPool,
                                       mbgl::MapMode::Still)),
       async(new uv_async_t) {
 
