@@ -124,7 +124,7 @@ public class MapView extends FrameLayout {
     initalizeDrawingSurface(context, options);
 
     // create native Map object
-    nativeMapView = new NativeMapView(this);
+    nativeMapView = new NativeMapView(this, new NativeLibrary());
 
     // callback for focal point invalidation
     FocalPointInvalidator focalPoint = new FocalPointInvalidator(compassView);
@@ -141,7 +141,8 @@ public class MapView extends FrameLayout {
     TrackingSettings trackingSettings = new TrackingSettings(myLocationView, uiSettings, focalPoint, zoomInvalidator);
     MyLocationViewSettings myLocationViewSettings = new MyLocationViewSettings(myLocationView, proj, focalPoint);
     MarkerViewManager markerViewManager = new MarkerViewManager((ViewGroup) findViewById(R.id.markerViewContainer));
-    AnnotationManager annotations = new AnnotationManager(nativeMapView, this, markerViewManager);
+    IconManager iconManager = new IconManager(nativeMapView);
+    AnnotationManager annotations = new AnnotationManager(nativeMapView, this, markerViewManager, iconManager);
     Transform transform = new Transform(nativeMapView, annotations.getMarkerViewManager(), trackingSettings);
     mapboxMap = new MapboxMap(nativeMapView, transform, uiSettings, trackingSettings, myLocationViewSettings, proj,
       registerTouchListener, annotations);
