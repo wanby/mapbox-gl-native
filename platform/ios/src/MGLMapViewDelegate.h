@@ -38,10 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 
  This method is called as the currently displayed map camera changes as part of
  an animation, whether due to a user gesture or due to a call to a method such
- as `-[MGLMapView setCamera:animated:]`. During the animation, this method may
- be called many times to report updates to the viewpoint. Therefore, your
- implementation of this method should be as lightweight as possible to avoid
- affecting performance.
+ as `-[MGLMapView setCamera:animated:]`. It can be called before the map has 
+ finished loading. During the animation, this method may be called many times 
+ to report updates to the viewpoint. Therefore, your implementation of this 
+ method should be as lightweight as possible to avoid affecting performance.
 
  @param mapView The map view whose viewpoint is changing.
  */
