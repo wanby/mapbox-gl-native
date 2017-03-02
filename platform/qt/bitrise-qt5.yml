@@ -40,7 +40,7 @@ workflows:
             export BUILDTYPE=Debug
             make qt-app
             make qt-qml-app
-            make run-qt-test
+            ulimit -c unlimited && (make run-qt-test || (lldb -c `ls -t /cores/* | head -n1` --batch -o 'thread backtrace all' -o 'quit' && exit 1))
         - is_debug: 'yes'
     - deploy-to-bitrise-io:
         title: Deploy to Bitrise.io
