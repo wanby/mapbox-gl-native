@@ -5,6 +5,7 @@
 #include <mbgl/text/placement_config.hpp>
 #include <mbgl/util/feature.hpp>
 #include <mbgl/actor/actor.hpp>
+#include <mbgl/map/query.hpp>
 
 #include <atomic>
 #include <memory>
@@ -45,6 +46,9 @@ public:
             const GeometryCoordinates& queryGeometry,
             const TransformState&,
             const optional<std::vector<std::string>>& layerIDs) override;
+    
+    void querySourceFeatures(std::vector<Feature>& result,
+                             const SourceQueryOptions options = {}) override;
 
     void cancel() override;
 

@@ -30,6 +30,10 @@
           0
         ]
       }
+    },
+    "source4": {
+      "type": "vector",
+      "url": "mapbox://mapbox.mapbox-streets-v6"
     }
   },
   "layers": [

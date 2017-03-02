@@ -33,5 +33,9 @@ void Tile::queryRenderedFeatures(
         const GeometryCoordinates&,
         const TransformState&,
         const optional<std::vector<std::string>>&) {}
+    
+void Tile::querySourceFeatures(
+        std::vector<Feature>&,
+        const SourceQueryOptions) {}
 
 } // namespace mbgl

@@ -3,6 +3,7 @@
 #include <mbgl/util/optional.hpp>
 #include <mbgl/util/chrono.hpp>
 #include <mbgl/map/mode.hpp>
+#include <mbgl/map/query.hpp>
 #include <mbgl/util/geo.hpp>
 #include <mbgl/util/feature.hpp>
 #include <mbgl/util/noncopyable.hpp>
@@ -186,6 +187,7 @@ public:
     std::vector<Feature> queryRenderedFeatures(const ScreenCoordinate&, const optional<std::vector<std::string>>& layerIDs = {});
     std::vector<Feature> queryRenderedFeatures(const ScreenBox&,        const optional<std::vector<std::string>>& layerIDs = {});
     AnnotationIDs queryPointAnnotations(const ScreenBox&);
+    std::vector<Feature> querySourceFeatures(const std::string&,        const SourceQueryOptions& options = {});
 
     // Memory
     void setSourceTileCacheSize(size_t);

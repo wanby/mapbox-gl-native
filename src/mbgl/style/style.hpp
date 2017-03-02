@@ -8,6 +8,7 @@
 #include <mbgl/text/glyph_atlas_observer.hpp>
 #include <mbgl/sprite/sprite_atlas_observer.hpp>
 #include <mbgl/map/mode.hpp>
+#include <mbgl/map/query.hpp>
 #include <mbgl/map/zoom_history.hpp>
 
 #include <mbgl/util/noncopyable.hpp>
@@ -96,6 +97,8 @@ public:
     RenderData getRenderData(MapDebugOptions, float angle) const;
 
     std::vector<Feature> queryRenderedFeatures(const QueryParameters&) const;
+    
+    std::vector<Feature> querySourceFeatures(const std::string&, const SourceQueryOptions = {}) const;
 
     float getQueryRadius() const;
 

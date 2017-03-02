@@ -9,6 +9,7 @@
 #include <mbgl/renderer/bucket.hpp>
 #include <mbgl/tile/geometry_tile_data.hpp>
 #include <mbgl/storage/resource.hpp>
+#include <mbgl/map/query.hpp>
 
 #include <string>
 #include <memory>
@@ -56,6 +57,10 @@ public:
             const GeometryCoordinates& queryGeometry,
             const TransformState&,
             const optional<std::vector<std::string>>& layerIDs);
+    
+    virtual void querySourceFeatures(
+            std::vector<Feature>& result,
+            const SourceQueryOptions options = {});
 
     void setTriedOptional();
 

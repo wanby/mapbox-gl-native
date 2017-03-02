@@ -62,3 +62,25 @@ TEST(Query, QueryRenderedFeaturesFilterLayer) {
     auto features4 = test.map.queryRenderedFeatures(zz, {{ "foobar", "layer3" }});
     EXPECT_EQ(features4.size(), 1u);
 }
+
+TEST(Query, QuerySourceFeatures) {
+    QueryTest test;
+    
+    auto features1 = test.map.querySourceFeatures("source3");
+    EXPECT_EQ(features1.size(), 1u);
+}
+
+TEST(Query, QuerySourceFeaturesOptionValidation) {
+    QueryTest test;
+    
+    // GeoJSONSource, doesn't require a layer id
+    test.map.querySourceFeatures("source3");
+    
+    // VectorSource, requires a layer id
+    try {
+        test.map.querySourceFeatures("source4");
+        EXPECT_TRUE(false);
+    } catch (...) {
+        // Should throw an exception
+    }
+}

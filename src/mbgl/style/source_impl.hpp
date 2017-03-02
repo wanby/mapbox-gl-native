@@ -6,6 +6,7 @@
 #include <mbgl/tile/tile_observer.hpp>
 #include <mbgl/tile/tile.hpp>
 #include <mbgl/tile/tile_cache.hpp>
+#include <mbgl/map/query.hpp>
 #include <mbgl/style/types.hpp>
 
 #include <mbgl/util/noncopyable.hpp>
@@ -67,6 +68,8 @@ public:
 
     std::unordered_map<std::string, std::vector<Feature>>
     queryRenderedFeatures(const QueryParameters&) const;
+    
+    std::vector<Feature> querySourceFeatures(SourceQueryOptions options = {});
 
     void setCacheSize(size_t);
     void onLowMemory();

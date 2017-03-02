@@ -245,6 +245,11 @@ inline bool Filter::operator()(const Feature& feature) const {
         return it->second;
     });
 }
+    
+template <class GeometryTileFeature>
+bool Filter::operator()(const GeometryTileFeature& feature) const {
+    return operator()(feature.getType(), feature.getID(), [&] (const auto& key) { return feature.getValue(key); });
+}
 
 template <class PropertyAccessor>
 bool Filter::operator()(FeatureType type, optional<FeatureIdentifier> id, PropertyAccessor accessor) const {
