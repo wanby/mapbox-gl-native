@@ -101,7 +101,7 @@ If using the static framework, add `$(inherited)` to your target’s Other Linke
 
 #### Carthage
 
-For instructions on installing stable release versions of the Mapbox iOS SDK with Carthage, see [our website](https://www.mapbox.com/ios-sdk/).
+For instructions on installing stable release versions of the Mapbox iOS SDK with Carthage, see [our website](https://www.mapbox.com/ios-sdk/). If you require a build without symbols pre-stripped, use [this feed URL](https://www.mapbox.com/ios-sdk/Mapbox-iOS-SDK-symbols.json) with Carthage.
 
 ##### Testing pre-releases with Carthage
 
