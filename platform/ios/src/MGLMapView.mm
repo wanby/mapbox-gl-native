@@ -45,6 +45,7 @@
 #import "NSException+MGLAdditions.h"
 #import "NSURL+MGLAdditions.h"
 #import "UIImage+MGLAdditions.h"
+#import "NSPredicate+MGLAdditions.h"
 
 #import "MGLFaux3DUserLocationAnnotationView.h"
 #import "MGLUserLocationAnnotationView.h"
@@ -4605,7 +4606,7 @@ public:
     return [self visibleFeaturesAtPoint:point inStyleLayersWithIdentifiers:nil];
 }
 
-- (NS_ARRAY_OF(id <MGLFeature>) *)visibleFeaturesAtPoint:(CGPoint)point inStyleLayersWithIdentifiers:(NS_SET_OF(NSString *) *)styleLayerIdentifiers
+- (NS_ARRAY_OF(id <MGLFeature>) *)visibleFeaturesAtPoint:(CGPoint)point inStyleLayersWithIdentifiers:(NS_SET_OF(NSString *) *)styleLayerIdentifiers withPredicate:(NSPredicate *)predicate
 {
     mbgl::ScreenCoordinate screenCoordinate = { point.x, point.y };
 
@@ -4620,8 +4621,13 @@ public:
         }];
         optionalLayerIDs = layerIDs;
     }
+    
+    mbgl::optional<mbgl::style::Filter> optionalFilter;
+    if (predicate) {
+        optionalFilter = predicate.mgl_filter;
+    }
 
-    std::vector<mbgl::Feature> features = _mbglMap->queryRenderedFeatures(screenCoordinate, { optionalLayerIDs, {} });
+    std::vector<mbgl::Feature> features = _mbglMap->queryRenderedFeatures(screenCoordinate, { optionalLayerIDs, optionalFilter });
     return MGLFeaturesFromMBGLFeatures(features);
 }
 
@@ -4629,7 +4635,7 @@ public:
     return [self visibleFeaturesInRect:rect inStyleLayersWithIdentifiers:nil];
 }
 
-- (NS_ARRAY_OF(id <MGLFeature>) *)visibleFeaturesInRect:(CGRect)rect inStyleLayersWithIdentifiers:(NS_SET_OF(NSString *) *)styleLayerIdentifiers {
+- (NS_ARRAY_OF(id <MGLFeature>) *)visibleFeaturesInRect:(CGRect)rect inStyleLayersWithIdentifiers:(NS_SET_OF(NSString *) *)styleLayerIdentifiers withPredicate:(NSPredicate *)predicate {
     mbgl::ScreenBox screenBox = {
         { CGRectGetMinX(rect), CGRectGetMinY(rect) },
         { CGRectGetMaxX(rect), CGRectGetMaxY(rect) },
@@ -4644,8 +4650,13 @@ public:
         }];
         optionalLayerIDs = layerIDs;
     }
+    
+    mbgl::optional<mbgl::style::Filter> optionalFilter;
+    if (predicate) {
+        optionalFilter = predicate.mgl_filter;
+    }
 
-    std::vector<mbgl::Feature> features = _mbglMap->queryRenderedFeatures(screenBox, { optionalLayerIDs, {} });
+    std::vector<mbgl::Feature> features = _mbglMap->queryRenderedFeatures(screenBox, { optionalLayerIDs, optionalFilter });
     return MGLFeaturesFromMBGLFeatures(features);
 }
 
